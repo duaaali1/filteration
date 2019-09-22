@@ -88,9 +88,13 @@ public class ProductAdapter extends RecyclerView.Adapter {
 
 
 
-    public void add(Product model) {
+    public void add(Product model , int position) {
         productList.add(model);
-        notifyItemInserted(productList.size() - 1);
+        notifyItemInserted(position);
+    }public void remove(Product model) {
+        productList.remove(model);
+        this.notifyDataSetChanged();
+
     }
 
     public void addAllItems(List<Product> list) {
