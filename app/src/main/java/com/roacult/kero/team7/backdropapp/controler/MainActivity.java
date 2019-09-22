@@ -6,6 +6,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -23,10 +24,10 @@ import jxl.Sheet;
 import jxl.Workbook;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private ArrayList<Product> productList = new ArrayList<>();
+    private ArrayList<Product> productList1 = new ArrayList<>();
     private ArrayList<Product> filterdproductList = new ArrayList<>();
-
     private EditText etName;
     private EditText edstorNO;
     private EditText edBuilding;
@@ -36,14 +37,14 @@ public class MainActivity extends AppCompatActivity {
     private  ProductAdapter productAdapter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search);
         init();
         readFromExcel();
         setupProductRv();
         addEditTextWatcher();
-
+        filter();
 
     }
     private void setupProductRv() {
@@ -77,13 +78,13 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                filter();
+                productAdapter.addAllItems(filterdproductList);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                filter();
-                productAdapter.addAllItems(filterdproductList);
+
 // productAdabter.add(filterdproductList)
             }
         };
@@ -92,24 +93,24 @@ public class MainActivity extends AppCompatActivity {
         edBuilding.addTextChangedListener(tw);
         edFloor.addTextChangedListener(tw);
         etStreet.addTextChangedListener(tw);
-        ;
+
     }
 
     private void filter() {
-        for (int i = 0; i < productList.size(); i++) {
-            filter(productList.get(i));
+        filterdproductList.clear();
+        for (int i = 0; i < productList1.size(); i++) {
+            filter(productList1.get(i));
         }
     }
 
     private void filter(Product product) {
-        filterdproductList.clear();
-        if ((product.getItem().contains(getText(etName)) || getText(etName).equals("")) && (product.getItem().equals(getText(edstorNO)) || getText(edstorNO).equals("")) && (product.getItem().equals(getText(edFloor)) || getText(edFloor).equals("")) && (product.getItem().equals(getText(etStreet)) || getText(etStreet).equals("")) && (product.getItem().contains(getText(edBuilding)) || getText(edBuilding).equals("")))
+        if ((product.getItem().toLowerCase().contains(getText(etName)) || getText(etName).equals("")) && (product.getStoreNumber().toLowerCase().equals(getText(edstorNO)) || getText(edstorNO).equals("")) && (product.getFloor().toLowerCase().equals(getText(edFloor)) || getText(edFloor).equals("")) && (product.getStreet().toLowerCase().equals(getText(etStreet)) || getText(etStreet).equals("")) && (product.getBuilding().toLowerCase().contains(getText(edBuilding)) || getText(edBuilding).equals("")))
             filterdproductList.add(product);
 
     }
 
     private String getText(EditText et) {
-        return et.getText().toString().trim();
+        return et.getText().toString().toLowerCase().trim();
     }
 
 
@@ -120,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
         edFloor = findViewById(R.id.edFloor);
         etStreet = findViewById(R.id.etStreet);
         rvProduct=findViewById(R.id.rvProduct);
+  //      seach=findViewById(R.id.seach);
     }
 
     private void readFromExcel() {
@@ -133,12 +135,20 @@ public class MainActivity extends AppCompatActivity {
             for (int i = 1; i < rows; i++) {
                 Product product =new Product(sheet.getCell(10, i).getContents(), sheet.getCell(9, i).getContents(), sheet.getCell(8, i).getContents(), sheet.getCell(7, i).getContents(), sheet.getCell(6, i).getContents(), sheet.getCell(5, i).getContents(), sheet.getCell(4, i).getContents(), sheet.getCell(3, i).getContents(), sheet.getCell(2, i).getContents(), sheet.getCell(1, i).getContents(), sheet.getCell(0, i).getContents(), null) ;
                 productList.add(product);
+                productList1.add(product);
             }
 
         } catch (Exception e) {
 
         }
 
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+
+        }
     }
 }
 

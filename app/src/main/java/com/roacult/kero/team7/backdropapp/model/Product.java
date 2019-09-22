@@ -1,5 +1,6 @@
 package com.roacult.kero.team7.backdropapp.model;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class Product extends BaseModel {
@@ -15,6 +16,7 @@ public class Product extends BaseModel {
     private String cartonsNo;
     private String total;
     private ArrayList<String> imagesList;
+    private DecimalFormat twoDForm = new DecimalFormat("#.#");
 
     public Product(String building, String floor, String street, String storeNumber, String itemNo, String item, String chinaPrice, String jordanianPrice, String packing, String cartonsNo, String total, ArrayList<String> imagesList) {
         this.building = building;
@@ -23,11 +25,12 @@ public class Product extends BaseModel {
         this.storeNumber = storeNumber;
         this.itemNo = itemNo;
         this.item = item;
-        this.chinaPrice = chinaPrice;
-        this.jordanianPrice = String.valueOf(Double.parseDouble(chinaPrice)*0.16);
+        this.chinaPrice = chinaPrice + " CNY";
+
+        this.jordanianPrice = Double.valueOf(twoDForm.format(Double.parseDouble(chinaPrice) * 0.16)) +" JD";
         this.packing = packing;
         this.cartonsNo = cartonsNo;
-        this.total = String.valueOf(Double.parseDouble(packing)*Double.parseDouble(cartonsNo));
+        this.total = String.valueOf(Double.valueOf(twoDForm.format(Double.parseDouble(packing) * Double.parseDouble(cartonsNo))));
         this.imagesList = imagesList;
     }
 

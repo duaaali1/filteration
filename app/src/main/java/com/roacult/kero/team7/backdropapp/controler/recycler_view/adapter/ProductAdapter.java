@@ -14,7 +14,6 @@ import com.roacult.kero.team7.backdropapp.controler.recycler_view.viewholder.Loa
 import com.roacult.kero.team7.backdropapp.controler.recycler_view.viewholder.ProductViewHolder;
 import com.roacult.kero.team7.backdropapp.model.BaseModel;
 import com.roacult.kero.team7.backdropapp.model.Product;
-import com.roacult.kero.team7.backdropapp.model.Progress;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,9 +94,9 @@ public class ProductAdapter extends RecyclerView.Adapter {
     }
 
     public void addAllItems(List<Product> list) {
-
+        this.productList.clear();
         this.productList.addAll(list);
-        notifyDataSetChanged();
+        this.notifyDataSetChanged();
 
     }
 
