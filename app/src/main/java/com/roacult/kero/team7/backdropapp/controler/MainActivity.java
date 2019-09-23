@@ -63,8 +63,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         productAdapter.setOnItemClickListner(new ProductAdapter.OnItemClickListner() {
             @Override
             public void onItemClick(int position, View view) {
-                showMenu(view);
-                position1=position;
+              /*  showMenu(view);
+                position1=position;*/
             }
             @Override
             public void onLongItemClick(int position, View view) {

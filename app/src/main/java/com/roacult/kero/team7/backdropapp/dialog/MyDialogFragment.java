@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.fragment.app.DialogFragment;
@@ -62,7 +61,6 @@ public class MyDialogFragment extends DialogFragment {
         edchinaPrice = rootView.findViewById(R.id.chinaPrice);
         edpacking = rootView.findViewById(R.id.packing);
         edcartonsNo = rootView.findViewById(R.id.cartonsNo);
-        ;
     }
 
     private void setupWishBtn(View rootView) {
