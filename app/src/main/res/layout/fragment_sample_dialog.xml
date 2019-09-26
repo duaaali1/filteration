@@ -106,7 +106,7 @@ android:id="@+id/packing"
                                 android:layout_height="wrap_content"
 
                                 android:layout_weight="1"
-
+                                android:inputType="number"
                                 android:popupBackground="#FF585858"
 
                                 android:singleLine="true"
@@ -139,7 +139,7 @@ android:id="@+id/packing"
                                 android:layout_width="0dp"
 android:id="@+id/cartonsNo"
                                 android:layout_height="wrap_content"
-
+                                android:inputType="number"
                                 android:layout_weight="1"
 
                                 android:popupBackground="#FF585858"
@@ -176,7 +176,7 @@ android:id="@+id/chinaPrice"
                                 android:layout_height="wrap_content"
 
                                 android:layout_weight="1"
-
+                                android:inputType="number"
                                 android:popupBackground="#FF585858"
 
                                 android:singleLine="true"
@@ -354,6 +354,7 @@ android:id="@+id/chinaPrice"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:text="رقم الصنف"
+
                     android:textColor="#FFF"
                     android:textSize="18sp" />
 
@@ -376,7 +377,7 @@ android:id="@+id/chinaPrice"
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="80dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="8dp"

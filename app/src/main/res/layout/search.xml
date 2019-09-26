@@ -1,66 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+<androidx.appcompat.widget.Toolbar
+    android:id="@+id/toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/colorPrimary"
+    app:title="البحث"
+    app:titleTextColor="#fff">
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        app:title="البحث"
-        app:titleTextColor="#fff">
+        android:gravity="center_vertical|end"
+        android:orientation="horizontal"
+        android:paddingRight="12dp">
 
+        <TextView
 
-        <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical|end"
-            android:orientation="horizontal"
-            android:paddingRight="12dp">
+            android:layout_width="30dp"
+            android:layout_weight="2"
+            android:layout_height="30dp"
+            android:textColor="#fff"
+            android:text="شخشير"
+            android:textSize="18sp"
+            android:gravity="start"
+            android:textStyle="bold"
+            />  <ImageView
 
-            <TextView
-
-                android:layout_width="30dp"
-                android:layout_weight="2"
-                android:layout_height="30dp"
-                android:textColor="#fff"
-                android:text="شخشير"
-                android:textSize="18sp"
-                android:gravity="start"
-                android:textStyle="bold"
-               />
+        android:layout_width="20dp"
+        android:layout_margin="10dp"
+        android:layout_height="20dp"
+        android:id="@+id/ivMark"
+        android:background="@drawable/check"
+        />
 
 
 
-        </LinearLayout>
+    </LinearLayout>
 
 
-    </androidx.appcompat.widget.Toolbar>
+</androidx.appcompat.widget.Toolbar>
 
 
-    <com.roacult.backdrop.BackdropLayout
-        android:id="@+id/container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:back_layout="@id/includedBack"
-        app:closeDrawable="@drawable/ic_search_black_24dp"
-        app:front_layout="@id/includedFront"
-        app:menuDrawable="@drawable/filter_variant"
-        app:peekHeight="56dp"
+<com.roacult.backdrop.BackdropLayout
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:back_layout="@id/includedBack"
+    app:closeDrawable="@drawable/ic_search_black_24dp"
+    app:front_layout="@id/includedFront"
+    app:menuDrawable="@drawable/filter_variant"
+    app:peekHeight="56dp"
 
-        app:toolbarId="@id/toolbar">
+    app:toolbarId="@id/toolbar">
 
-        <include
-            android:id="@+id/includedBack"
-            layout="@layout/filter_product" />
+    <include
+        android:id="@+id/includedBack"
+        layout="@layout/filter_product" />
 
-        <include
-            android:id="@+id/includedFront"
-            layout="@layout/search_product" />
+    <include
+        android:id="@+id/includedFront"
+        layout="@layout/search_product" />
 
-    </com.roacult.backdrop.BackdropLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        app:borderWidth="0dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:backgroundTint="@android:color/transparent"
+
+        android:src="@drawable/add" />
+</com.roacult.backdrop.BackdropLayout>
+
+
 </LinearLayout>

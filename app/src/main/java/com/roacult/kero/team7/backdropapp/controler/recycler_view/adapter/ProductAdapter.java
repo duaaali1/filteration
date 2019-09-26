@@ -34,6 +34,10 @@ public class ProductAdapter extends RecyclerView.Adapter {
         void onItemClick(int position, View view);
 
         void onLongItemClick(int position, View view);
+
+        void onNOClick(int position, View view);
+
+        void onMenuClick(int position, View view);
     }
 
     public void setOnItemClickListner(ProductAdapter.OnItemClickListner listner) {
@@ -50,7 +54,7 @@ public class ProductAdapter extends RecyclerView.Adapter {
         switch (viewType) {
             case ITEM:
                 View itemView = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.row_vertical_products_per_cat, parent, false);
+                        .inflate(R.layout.new_row, parent, false);
                 return new ProductViewHolder(itemView, mlistner);
 
             case LOADING:
