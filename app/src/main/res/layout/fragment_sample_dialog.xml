@@ -169,7 +169,10 @@ android:id="@+id/cartonsNo"
                                 android:text="السعر (CNY)"
                                 android:textColor="#FFF"
                                 android:textSize="18sp" />
-
+                            item
+                            packing
+                            cartonsNo
+                            chinaPrice
                             <EditText
                                 android:layout_width="0dp"
 android:id="@+id/chinaPrice"

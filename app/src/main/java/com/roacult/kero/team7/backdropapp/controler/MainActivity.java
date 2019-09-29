@@ -1,102 +1,139 @@
 package com.roacult.kero.team7.backdropapp.controler;
 
 import android.annotation.SuppressLint;
+
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
-import android.content.res.Resources;
+
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.DisplayMetrics;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.preference.PreferenceManager;
+
 import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageView;
+
+
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.viewpager.widget.ViewPager;
+
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.roacult.kero.team7.backdropapp.R;
 import com.roacult.kero.team7.backdropapp.controler.recycler_view.adapter.ProductAdapter;
 import com.roacult.kero.team7.backdropapp.dialog.AddDialogFragment;
 import com.roacult.kero.team7.backdropapp.dialog.CardDialogFragment;
 import com.roacult.kero.team7.backdropapp.dialog.MoreDialogFragment;
-import com.roacult.kero.team7.backdropapp.dialog.MyDialogFragment;
 import com.roacult.kero.team7.backdropapp.model.Product;
+import com.roacult.kero.team7.backdropapp.utils.Utils;
 
 import java.io.InputStream;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Locale;
+import java.util.List;
 
 import jxl.Sheet;
 import jxl.Workbook;
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, PopupMenu.OnMenuItemClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private ArrayList<Product> productList = new ArrayList<>();
     private ArrayList<Product> productList1 = new ArrayList<>();
     private ArrayList<Product> markedList1 = new ArrayList<>();
     private ArrayList<Product> filterdproductList = new ArrayList<>();
-    private EditText etName;
-    private EditText edstorNO;
-    private EditText edBuilding;
-    private EditText etStreet;
     private RecyclerView rvProduct;
     private ProductAdapter productAdapter;
+    private com.github.clans.fab.FloatingActionButton fabSearch;
+    private com.github.clans.fab.FloatingActionButton fabMark;
+    private com.github.clans.fab.FloatingActionButton fabAdd;
+    private String Name;
+    private String storNO;
+    private String Building;
+    private String Street;
     private int position1;
-    private  ImageView more;
+    private Toolbar mTopToolbar;
 
-    private FloatingActionButton fab;
-
+    private com.github.clans.fab.FloatingActionMenu fab;
+    private static MyCallback myCallback;
     @SuppressLint("NewApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Resources res = this.getResources();
-        // Change locale settings in the app.
-
-        DisplayMetrics dm = res.getDisplayMetrics();
-        android.content.res.Configuration conf = res.getConfiguration();
-        conf.setLocale(new Locale("ar")); // API 17+ only.
-        // Use conf.locale = new Locale(...) if targeting lower versions
-        res.updateConfiguration(conf, dm);
+        Utils.arabicScrean(this);
         setContentView(R.layout.search);
-        Toolbar mTopToolbar = findViewById(R.id.toolbar);
+        mTopToolbar = findViewById(R.id.toolbar);
+        mTopToolbar.setElevation(10);
         setSupportActionBar(mTopToolbar);
         init();
-        readFromExcel();
+        setToolbar();
+        getExtra();
+        getData();
         setupProductRv();
-        addEditTextWatcher();
-        fab.setOnClickListener(this);
         filter();
-      //  more.setOnClickListener(this);
+        fabSearch.setOnClickListener(this);
+        fabMark.setOnClickListener(this);
+        fabAdd.setOnClickListener(this);
+        search();
+        //markedList1= (ArrayList<Product>) readList("mark");
 
+
+    }
+
+    private void getData() {
+        ArrayList List = (ArrayList) readList("List");
+        if (List == null) {
+            readFromExcel();
+            saveList(productList1, "List");
+
+        } else
+            productList1 = List;
+    }
+
+    public static void setCallBack(MyCallback callBack) {
+        myCallback = callBack;
+    }
+
+    public void setToolbar() {
+        setSupportActionBar(mTopToolbar);
+        assert getSupportActionBar() != null;   //null check
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setElevation(10);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
+    }
+
+
+    private void getExtra() {
+        Intent intent = getIntent();
+        Name = intent.getExtras().getString("Name");
+        storNO = intent.getExtras().getString("storNO");
+        Building = intent.getExtras().getString("Building");
+        Street = intent.getExtras().getString("Street");
     }
 
     private void setupProductRv() {
         rvProduct.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
-
-
         rvProduct.setItemAnimator(new DefaultItemAnimator());
         rvProduct.setNestedScrollingEnabled(false);
-
         productAdapter = new ProductAdapter(this, productList);
-
         productAdapter.setOnItemClickListner(new ProductAdapter.OnItemClickListner() {
             @Override
             public void onItemClick(int position, View view) {
-
+                position1 = position;
             }
 
             @Override
-            public void onLongItemClick(int position, View view) {
-
+            public void onchangeMark(boolean mark) {
+             //   ismark = mark;
             }
+
 
             @Override
             public void onNOClick(int position, View view) {
@@ -104,37 +141,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             @Override
-            public void onMenuClick(int position, View view) {
-                setupMoreDialog();
+            public void onMenuClick(int position, View view, boolean mark) {
+                position1 = position;
+
+
+                setupMoreDialog(view.getVisibility()==View.VISIBLE, view);
+               // ismark = mark;
+
             }
+
+            @Override
+            public void setViewPAger(ViewPager viewPager) {
+                setupViewPager(viewPager);
+            }
+
+
         });
         rvProduct.setAdapter(productAdapter);
     }
+    private void setupViewPager(ViewPager viewPager) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+      /*  for (int i = 0; i < product.getImages().size(); i++) {
+            adapter.addFragment(new ViewPagerFragment(product.getImages().get(i).getSrc()));
+        }*/
+        //   adapter.addFragment(new ViewPagerFragment("https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"));
+        viewPager.setAdapter(adapter);
+    }
 
-    private void addEditTextWatcher() {
-        TextWatcher tw = new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                filter();
-                productAdapter.addAllItems(filterdproductList);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-// productAdabter.add(filterdproductList)
-            }
-        };
-        etName.addTextChangedListener(tw);
-        edstorNO.addTextChangedListener(tw);
-        edBuilding.addTextChangedListener(tw);
-        etStreet.addTextChangedListener(tw);
-
+    private void search() {
+        filter();
+        productAdapter.addAllItems(filterdproductList);
     }
 
     private void filter() {
@@ -143,64 +180,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             filter(productList1.get(i));
         }
     }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.reset:
-                productAdapter.addAllItems(markedList1);
-                return true;
-            case R.id.view:
-                productAdapter.addAllItems(filterdproductList);
-
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
 
 
     private void filter(Product product) {
-        if ((product.getItem().toLowerCase().contains(getText(etName)) || getText(etName).equals("")) && (product.getStoreNumber().toLowerCase().equals(getText(edstorNO)) || getText(edstorNO).equals(""))  && (product.getStreet().toLowerCase().equals(getText(etStreet)) || getText(etStreet).equals("")) && (product.getBuilding().toLowerCase().contains(getText(edBuilding)) || getText(edBuilding).equals("")) )
+        if ((product.getItem().toLowerCase().contains(Name) || Name.equals("")) && (product.getStoreNumber().toLowerCase().equals(storNO) || storNO.equals("")) && (product.getStreet().toLowerCase().equals(Street) || Street.equals("")) && (product.getBuilding().toLowerCase().contains(Building) || Building.equals("")))
             filterdproductList.add(product);
 
     }
 
-    private String getText(EditText et) {
-        return et.getText().toString().toLowerCase().trim();
-    }
-
+//
 
     private void init() {
-        etName = findViewById(R.id.etName);
-        edstorNO = findViewById(R.id.edstorNO);
-        edBuilding = findViewById(R.id.edBuilding);
-        etStreet = findViewById(R.id.etStreet);
+
         rvProduct = findViewById(R.id.rvProduct);
+        fab = findViewById(R.id.menu_green);
         //      seach=findViewById(R.id.seach);
-        fab = findViewById(R.id.fab);
+        // fab = findViewById(R.id.fab);
+        fabSearch = findViewById(R.id.fabSearch);
+        fabMark = findViewById(R.id.fabMark);
+        fabAdd = findViewById(R.id.fabAdd);
 
     }
 
     private void readFromExcel() {
         try {
+
             AssetManager am = getAssets();
             InputStream inputStream = am.open("android.xls");
             Workbook workbook = Workbook.getWorkbook(inputStream);
             Sheet sheet = workbook.getSheet(0);
             int rows = sheet.getRows();
 
-            for (int i = 1; i < rows; i++) {
-                Product product = new Product(sheet.getCell(10, i).getContents(), sheet.getCell(9, i).getContents(), sheet.getCell(8, i).getContents(), sheet.getCell(7, i).getContents(), sheet.getCell(6, i).getContents(), sheet.getCell(5, i).getContents(), sheet.getCell(4, i).getContents(), sheet.getCell(3, i).getContents(), sheet.getCell(2, i).getContents(), sheet.getCell(1, i).getContents(), sheet.getCell(0, i).getContents(), null);
+            for (int i = 1; i < rows;  i++) {
+                Product product = new Product(sheet.getCell(0, i).getContents(), null ,sheet.getCell(1, i).getContents(),  sheet.getCell(2, i).getContents(),null, sheet.getCell(3, i).getContents(), sheet.getCell(4, i).getContents(), sheet.getCell(5, i).getContents(), sheet.getCell(6, i).getContents(), sheet.getCell(7, i).getContents(), sheet.getCell(8, i).getContents(), null , sheet.getCell(9, i).getContents());
                 productList.add(product);
                 productList1.add(product);
             }
+
 
         } catch (Exception e) {
 
@@ -209,12 +225,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-
-            case R.id.fab:
+            case R.id.fabSearch:
+                productAdapter.addAllItems(filterdproductList);
+                break;
+            case R.id.fabMark:
+                productAdapter.addAllItems(readList("mark"));
+                break;
+            case R.id.fabAdd:
                 setupAddDialog();
 
                 break;
@@ -223,40 +243,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-
-
-    @Override
-    public boolean onMenuItemClick(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.delete:
-                productAdapter.remove(productList1.get(position1));
-                productList1.remove(productList1.get(position1));
-
-                return true;
-            case R.id.edit:
-                setupDialog();
-                return true;
-            case R.id.mark:
-                markedList1.add(productList1.get(position1));
-                return true;
-            default:
-                return false;
-        }
-    }
-
     private void setupDialog() {
-        final MyDialogFragment dialogFragment = new MyDialogFragment(new MyCallback() {
+        final AddDialogFragment dialogFragment = new AddDialogFragment(new MyCallback() {
             @Override
             public void onSave(Product product) {
-                productAdapter.remove(productList1.get(position1));
-                productAdapter.add(product, position1);
-                productList1.remove(productList1.get(position1));
-                productList1.add(position1, product);
-
-
+                productAdapter.update(product, position1);
+                productList1.set(productList1.indexOf(filterdproductList.get(position1)), product);
+                if (markedList1.contains(filterdproductList.get(position1)))
+                    markedList1.set(markedList1.indexOf(filterdproductList.get(position1)), product);
+                filterdproductList.set(position1, product);
+                saveList(markedList1, "mark");
+                saveList(productList1, "List");
             }
-
-
         });
         dialogFragment.show(getSupportFragmentManager(), "Sample Fragment");
     }
@@ -266,6 +264,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onSave(Product product) {
                 productList1.add(product);
+                filterdproductList.add(product);
+                saveList(productList1, "List");
                 productAdapter.add(product, productList1.size() - 1);
             }
 
@@ -273,8 +273,53 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
         dialogFragment.show(getSupportFragmentManager(), "Sample Fragment");
     }
-    private void setupMoreDialog() {
-        final MoreDialogFragment dialogFragment = new MoreDialogFragment();
+
+    private void setupMoreDialog(final boolean mark, final View view) {
+        final MoreDialogFragment dialogFragment = new MoreDialogFragment(new MyCallback() {
+            @Override
+            public void onSave(Product product) {
+
+            }
+
+
+            @Override
+            public void delete() {
+                productAdapter.remove(filterdproductList.get(position1));
+                productList1.remove(filterdproductList.get(position1));
+
+
+                saveList(productList1, "List");
+                if (markedList1.contains(filterdproductList.get(position1))) {
+
+                    markedList1.remove(filterdproductList.get(position1));
+                    saveList(markedList1, "mark");
+                }
+                filterdproductList.remove(position1);
+            }
+
+            @Override
+            public void edit() {
+                setupDialog();
+
+            }
+
+            @Override
+            public void mark() {
+                if (view.getVisibility()==View.VISIBLE)
+                    view.setVisibility(View.GONE);
+                else
+                    view.setVisibility(View.VISIBLE);
+                //    myCallback.mark();
+                if (view.getVisibility()==View.VISIBLE) {
+                    markedList1.add(filterdproductList.get(position1));
+                } else
+                    if (markedList1.contains(filterdproductList.get(position1)))
+                    markedList1.remove(filterdproductList.get(position1));
+
+                saveList(markedList1, "mark");
+
+            }
+        }, mark);
         dialogFragment.show(getSupportFragmentManager(), "Sample Fragment");
     }
 
@@ -286,6 +331,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
 
+    }
+
+    private List<Product> readList(String TAG) {
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        Gson gson = new Gson();
+        String json = sharedPrefs.getString(TAG, "");
+        Type type = new TypeToken<List<Product>>() {
+        }.getType();
+        return gson.fromJson(json, type);
+    }
+
+
+    private void saveList(ArrayList<Product> List, String TAG) {
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sharedPrefs.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(List);
+        editor.putString(TAG, json);
+        editor.apply();
     }
 }
 

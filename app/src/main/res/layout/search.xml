@@ -1,86 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:app="http://schemas.android.com/apk/res-auto"
 android:layout_width="match_parent"
-android:layout_height="match_parent"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+
+    android:layout_height="match_parent"
 android:orientation="vertical">
 
-<androidx.appcompat.widget.Toolbar
-    android:id="@+id/toolbar"
+<LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="?attr/colorPrimary"
-    app:title="البحث"
-    app:titleTextColor="#fff">
-
-
-    <LinearLayout
-        android:id="@+id/linearLayout"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical|end"
-        android:orientation="horizontal"
-        android:paddingRight="12dp">
-
-        <TextView
-
-            android:layout_width="30dp"
-            android:layout_weight="2"
-            android:layout_height="30dp"
-            android:textColor="#fff"
-            android:text="شخشير"
-            android:textSize="18sp"
-            android:gravity="start"
-            android:textStyle="bold"
-            />  <ImageView
-
-        android:layout_width="20dp"
-        android:layout_margin="10dp"
-        android:layout_height="20dp"
-        android:id="@+id/ivMark"
-        android:background="@drawable/check"
-        />
+        android:background="?attr/colorPrimary"
+        app:title="البحث"
+        app:titleTextColor="#fff">
 
 
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|end"
+            android:orientation="horizontal"
+            android:paddingRight="12dp">
 
-    </LinearLayout>
+            <TextView
+
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_weight="2"
+                android:gravity="start"
+                android:text="شخشير"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
 
-</androidx.appcompat.widget.Toolbar>
+        </LinearLayout>
 
 
-<com.roacult.backdrop.BackdropLayout
-    android:id="@+id/container"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:back_layout="@id/includedBack"
-    app:closeDrawable="@drawable/ic_search_black_24dp"
-    app:front_layout="@id/includedFront"
-    app:menuDrawable="@drawable/filter_variant"
-    app:peekHeight="56dp"
+    </androidx.appcompat.widget.Toolbar>
 
-    app:toolbarId="@id/toolbar">
 
-    <include
-        android:id="@+id/includedBack"
-        layout="@layout/filter_product" />
 
     <include
         android:id="@+id/includedFront"
         layout="@layout/search_product" />
+</LinearLayout>
 
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        app:borderWidth="0dp"
+    <com.github.clans.fab.FloatingActionMenu
+        android:id="@+id/menu_green"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        android:backgroundTint="@android:color/transparent"
+android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        fab:menu_animationDelayPerItem="0"
+        fab:menu_colorNormal="#EE4E4E"
+        fab:menu_colorPressed="#EE4E4E"
+        fab:menu_colorRipple="#C43D3D"
+        fab:menu_icon="@drawable/ic_star_black_24dp"
+        fab:menu_labels_ellipsize="end"
+        fab:menu_labels_maxLines="2"
+        android:layout_alignParentLeft="true">
 
-        android:src="@drawable/add" />
-</com.roacult.backdrop.BackdropLayout>
+        <com.github.clans.fab.FloatingActionButton
+            style="@style/fab"
+            android:id="@+id/fabAdd"
+            fab:menu_colorNormal="#EE4E4E"
+            fab:menu_colorPressed="#EE4E4E"
+            fab:fab_size="mini"
+            fab:menu_colorRipple="#C43D3D"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_add_black_24dp"
+            fab:fab_label="اضافة منتج" />
 
 
-</LinearLayout>
+        <com.github.clans.fab.FloatingActionButton
+            style="@style/fab"
+            android:id="@+id/fabSearch"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_search_black_24dp"
+            fab:menu_colorNormal="#EE4E4E"
+            fab:fab_size="mini"
+            fab:menu_colorPressed="#EE4E4E"
+            fab:menu_colorRipple="#C43D3D"
+            fab:fab_label="عرض نتائج البحث" />
+        <com.github.clans.fab.FloatingActionButton
+            style="@style/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_size="mini"
+            android:id="@+id/fabMark"
+
+            android:src="@drawable/ic_bookmark_black_24dp"
+            fab:menu_colorNormal="#EE4E4E"
+            fab:menu_colorPressed="#EE4E4E"
+            fab:menu_colorRipple="#C43D3D"
+            fab:fab_label="عرض المنتجات المشار اليها" />
+
+    </com.github.clans.fab.FloatingActionMenu>
+
+
+
+
+
+</RelativeLayout>

@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -21,19 +22,17 @@ import com.roacult.kero.team7.backdropapp.model.Product;
 
 
 public class MyDialogFragment extends DialogFragment {
-    private TextView img1, ivCancel;
+    private Button img1, ivCancel;
     private MyCallback myCallback;
     private EditText edbuilding;
-    private EditText edfloor;
     private EditText edstreet;
     private EditText edstoreNumber;
-    private EditText editemNo;
     private EditText editem;
     private EditText edchinaPrice;
-    private EditText edjordanianPrice;
     private EditText edpacking;
     private EditText edcartonsNo;
-    private EditText edtotal;
+    private EditText edNotes;
+
 
 
     public MyDialogFragment(MyCallback myCallback) {
@@ -44,7 +43,7 @@ public class MyDialogFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View rootView = inflater.from(getActivity()).inflate(R.layout.fragment_sample_dialog, container, false);
+        View rootView = inflater.from(getActivity()).inflate(R.layout.daialog_edit_product, container, false);
         setupCancel(rootView);
         init(rootView);
         setupWishBtn(rootView);
@@ -53,14 +52,13 @@ public class MyDialogFragment extends DialogFragment {
 
     private void init(View rootView) {
         edbuilding = rootView.findViewById(R.id.building);
-        edfloor = rootView.findViewById(R.id.floor);
         edstreet = rootView.findViewById(R.id.street);
         edstoreNumber = rootView.findViewById(R.id.storeNumber);
-        editemNo = rootView.findViewById(R.id.itemNo);
         editem = rootView.findViewById(R.id.item);
         edchinaPrice = rootView.findViewById(R.id.chinaPrice);
         edpacking = rootView.findViewById(R.id.packing);
         edcartonsNo = rootView.findViewById(R.id.cartonsNo);
+        edcartonsNo = rootView.findViewById(R.id.notes);
     }
 
     private void setupWishBtn(View rootView) {
@@ -68,7 +66,7 @@ public class MyDialogFragment extends DialogFragment {
         img1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                myCallback.onSave(new Product(getText(edbuilding), getText(edfloor), getText(edstreet), getText(edstoreNumber), getText(editemNo), getText(editem), getText(edchinaPrice), null, getText(edpacking), getText(edcartonsNo), null, null));
+                myCallback.onSave(new Product(getText(edbuilding),null, getText(edstreet), getText(edstoreNumber),null, getText(editem), getText(edchinaPrice), null, getText(edpacking), getText(edcartonsNo), null, null , getText(edNotes)));
                 getDialog().dismiss();
             }
         });

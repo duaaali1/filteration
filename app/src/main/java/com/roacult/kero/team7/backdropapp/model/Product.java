@@ -1,5 +1,7 @@
 package com.roacult.kero.team7.backdropapp.model;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -16,9 +18,32 @@ public class Product extends BaseModel {
     private String cartonsNo;
     private String total;
     private ArrayList<String> imagesList;
-    private DecimalFormat twoDForm = new DecimalFormat("#.#");
+    private  boolean mark =false ;
 
-    public Product(String building, String floor, String street, String storeNumber, String itemNo, String item, String chinaPrice, String jordanianPrice, String packing, String cartonsNo, String total, ArrayList<String> imagesList) {
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    private  String notes;
+
+    public boolean getMark() {
+        return mark;
+    }
+
+    public void setMark(Boolean mark) {
+        this.mark = mark;
+    }
+
+
+
+
+   // private DecimalFormat twoDForm = new DecimalFormat("#.#");
+
+    public Product(String building, String floor, String street, String storeNumber, String itemNo, String item, String chinaPrice, String jordanianPrice, String packing, String cartonsNo, String total, ArrayList<String> imagesList , String  notes) {
         this.building = building;
         this.floor = floor;
         this.street = street;
@@ -26,12 +51,26 @@ public class Product extends BaseModel {
         this.itemNo = itemNo;
         this.item = item;
         this.chinaPrice = chinaPrice + " CNY";
-
-        this.jordanianPrice = Double.valueOf(twoDForm.format(Double.parseDouble(chinaPrice) * 0.16)) +" JD";
+        this.jordanianPrice = getJordanianPrice(chinaPrice);
         this.packing = packing;
         this.cartonsNo = cartonsNo;
-        this.total = String.valueOf(Double.valueOf(twoDForm.format(Double.parseDouble(packing) * Double.parseDouble(cartonsNo))));
+        this.total = getTotal(packing, cartonsNo);
         this.imagesList = imagesList;
+        this.notes=notes;
+    }
+
+    @NotNull
+    private String getJordanianPrice(String chinaPrice) {
+        if (!chinaPrice.equals(""))
+        return Double.valueOf(new DecimalFormat("#.#").format(Double.parseDouble(chinaPrice) * 0.16)) +" JD";
+    return null;
+    }
+
+    @NotNull
+    private String getTotal(String packing, String cartonsNo) {
+        if(!packing.equals("")&& !cartonsNo.equals(""))
+            return String.valueOf(Double.valueOf(new DecimalFormat("#.#").format(Double.parseDouble(packing) * Double.parseDouble(cartonsNo))));
+        return null;
     }
 
     public String getBuilding() {

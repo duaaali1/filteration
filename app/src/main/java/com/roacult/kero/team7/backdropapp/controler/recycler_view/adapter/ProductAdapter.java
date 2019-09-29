@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import com.roacult.kero.team7.backdropapp.R;
 import com.roacult.kero.team7.backdropapp.controler.recycler_view.viewholder.LoadingViewHolder;
@@ -33,11 +34,13 @@ public class ProductAdapter extends RecyclerView.Adapter {
     public interface OnItemClickListner {
         void onItemClick(int position, View view);
 
-        void onLongItemClick(int position, View view);
+        void onchangeMark(boolean mark);
 
         void onNOClick(int position, View view);
 
-        void onMenuClick(int position, View view);
+        void onMenuClick(int position, View view , boolean mark );
+
+        void setViewPAger(ViewPager viewPager);
     }
 
     public void setOnItemClickListner(ProductAdapter.OnItemClickListner listner) {
@@ -98,6 +101,10 @@ public class ProductAdapter extends RecyclerView.Adapter {
     }public void remove(Product model) {
         productList.remove(model);
         this.notifyDataSetChanged();
+
+    }public void update(Product model , int position) {
+        productList.set(position, model);
+        this.notifyItemChanged(position);
 
     }
 

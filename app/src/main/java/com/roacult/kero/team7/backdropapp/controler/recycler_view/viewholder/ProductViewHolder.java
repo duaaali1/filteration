@@ -1,6 +1,6 @@
 package com.roacult.kero.team7.backdropapp.controler.recycler_view.viewholder;
 
-
+import android.app.Activity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -8,32 +8,58 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import com.roacult.kero.team7.backdropapp.R;
+import com.roacult.kero.team7.backdropapp.controler.MainActivity;
+import com.roacult.kero.team7.backdropapp.controler.MyCallback;
+import com.roacult.kero.team7.backdropapp.controler.ViewPagerAdapter;
 import com.roacult.kero.team7.backdropapp.controler.recycler_view.adapter.ProductAdapter;
 import com.roacult.kero.team7.backdropapp.model.Product;
 
-
 public class ProductViewHolder extends RecyclerView.ViewHolder {
     private TextView tvbuilding;
-
     private TextView tvstreet;
     private TextView tvstoreNumber;
-    private TextView tvitemNo;
     private TextView tvitem;
     private TextView tvchinaPrice;
     private TextView tvjordanianPrice;
     private TextView tvpacking;
     private TextView tvcartonsNo;
     private TextView tvtotal;
-    private ImageView imagesList;
-
+    private ImageView markImageView;
     private TextView llstorNo;
     private LinearLayout image;
+    private ViewPager viewPager;
+    private  TextView tvNotes;
 
-    public ProductViewHolder(@NonNull View itemView, final ProductAdapter.OnItemClickListner mlistener) {
+    private  boolean mark =false ;
+private  ProductAdapter.OnItemClickListner listner;
+    public ProductViewHolder(@NonNull final View itemView, final ProductAdapter.OnItemClickListner mlistener) {
         super(itemView);
         init(itemView);
+        this.listner=mlistener;
+
+        listner.setViewPAger(viewPager);
+       // setupViewPager(viewPager);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -55,7 +81,9 @@ public class ProductViewHolder extends RecyclerView.ViewHolder {
                     }
                 }
             }
-        });tvstoreNumber.setOnClickListener(new View.OnClickListener() {
+        });
+
+        tvstoreNumber.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mlistener != null) {
@@ -72,12 +100,41 @@ public class ProductViewHolder extends RecyclerView.ViewHolder {
                 if (mlistener != null) {
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
-                        mlistener.onMenuClick(position, view);
+                        mlistener.onMenuClick(position, markImageView, mark);
                     }
                 }
             }
         });
+        MainActivity.setCallBack(new MyCallback() {
+            @Override
+            public void onSave(Product product) {
+
+            }
+
+            @Override
+            public void mark() {
+                markImageView.setVisibility(getVisible());
+
+            }
+        });
+
+
     }
+
+
+    private int getVisible() {
+        if (mark) {
+           mark=false;
+           listner.onchangeMark(mark);
+            return View.GONE;
+        } else {
+            mark=true;
+            listner.onchangeMark(mark);
+
+            return View.VISIBLE;
+        }
+    }
+
 
     private void init(View view) {
         tvbuilding = view.findViewById(R.id.tvbuilding);
@@ -92,21 +149,23 @@ public class ProductViewHolder extends RecyclerView.ViewHolder {
         llstorNo = view.findViewById(R.id.llstorNo);
         image = view.findViewById(R.id.more);
         //imagesList=view.findViewById(R.i);
+        markImageView = view.findViewById(R.id.mark);
+        viewPager =view. findViewById(R.id.viewpager);
+        tvNotes = view.findViewById(R.id.tvNotes);
 
 
     }
 
-    public void setData(Product product) {
-        tvbuilding.setText(product.getBuilding());
-
-        tvstreet.setText(product.getStreet());
-        tvstoreNumber.setText(product.getStoreNumber());
-        tvitem.setText(product.getItem());
-        tvchinaPrice.setText(product.getChinaPrice());
-        tvjordanianPrice.setText(product.getJordanianPrice());
-        tvpacking.setText(product.getPacking());
-        tvcartonsNo.setText(product.getCartonsNo());
-        tvtotal.setText(product.getTotal());
+    public void setData(Product product1) {
+        tvbuilding.setText(product1.getBuilding());
+        tvstreet.setText(product1.getStreet());
+        tvstoreNumber.setText(product1.getStoreNumber());
+        tvitem.setText(product1.getItem());
+        tvchinaPrice.setText(product1.getChinaPrice());
+        tvjordanianPrice.setText(product1.getJordanianPrice());
+        tvpacking.setText(product1.getPacking());
+        tvcartonsNo.setText(product1.getCartonsNo());
+        tvtotal.setText(product1.getTotal());
     }
 }
 
