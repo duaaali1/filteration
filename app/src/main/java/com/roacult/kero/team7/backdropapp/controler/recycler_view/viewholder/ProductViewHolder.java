@@ -40,25 +40,6 @@ private  ProductAdapter.OnItemClickListner listner;
         init(itemView);
         this.listner=mlistener;
 
-        listner.setViewPAger(viewPager);
-       // setupViewPager(viewPager);
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
 
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -166,6 +147,26 @@ private  ProductAdapter.OnItemClickListner listner;
         tvpacking.setText(product1.getPacking());
         tvcartonsNo.setText(product1.getCartonsNo());
         tvtotal.setText(product1.getTotal());
+        tvNotes.setText(product1.getNotes());
+        listner.setViewPAger(viewPager , product1);
+        // setupViewPager(viewPager);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 }
 

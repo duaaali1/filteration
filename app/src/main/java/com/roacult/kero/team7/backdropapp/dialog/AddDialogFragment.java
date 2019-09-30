@@ -67,7 +67,7 @@ public class AddDialogFragment extends DialogFragment {
         img1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                myCallback.onSave(new Product(getText(edbuilding), null, getText(edstreet), getText(edstoreNumber), null, getText(editem), getText(edchinaPrice), null, getText(edpacking), getText(edcartonsNo), null, null , null));
+                myCallback.onSave(new Product(getText(edbuilding), null, getText(edstreet), getText(edstoreNumber), null, getText(editem), getText(edchinaPrice), null, getText(edpacking), getText(edcartonsNo), null, null , getText(edNotes)));
                 getDialog().dismiss();
             }
         });

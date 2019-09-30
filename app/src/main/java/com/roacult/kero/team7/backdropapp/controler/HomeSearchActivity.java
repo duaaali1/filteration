@@ -26,25 +26,25 @@ public class HomeSearchActivity extends AppCompatActivity implements View.OnClic
     private EditText edstorNO;
     private EditText edBuilding;
     private EditText etStreet;
+    private String Name;
+    private String storNO;
+    private String Building;
+    private String Street;
+    private Toolbar toolbar;
+    private Button btn_search;
 
-   private String Name;
-   private String storNO;
-   private String Building;
-   private String Street;
-   private Toolbar toolbar ;
-   private Button btn_search;
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Utils. arabicScrean(this)  ;
-
+        Utils.arabicScrean(this);
         setContentView(R.layout.activity_signin);
-        init() ;
+        init();
         btn_search.setOnClickListener(this);
         toolbar.setElevation(10);
 
     }
+
     private void init() {
         etName = findViewById(R.id.etName);
         edstorNO = findViewById(R.id.edstorNO);
@@ -56,13 +56,12 @@ public class HomeSearchActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onClick(View view) {
-        if (view.getId()==R.id.btn_search) {
-            Name=getText(etName);
-            storNO=getText(edstorNO);
-            Building=getText(edBuilding);
-            Street=getText(etStreet);
+        if (view.getId() == R.id.btn_search) {
+            Name = getText(etName);
+            storNO = getText(edstorNO);
+            Building = getText(edBuilding);
+            Street = getText(etStreet);
         }
-
 
 
         Intent i = new Intent(this, MainActivity.class);
@@ -72,6 +71,7 @@ public class HomeSearchActivity extends AppCompatActivity implements View.OnClic
         i.putExtra("Street", Street);
         startActivity(i);
     }
+
     private String getText(EditText et) {
         return et.getText().toString().toLowerCase().trim();
     }

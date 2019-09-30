@@ -40,7 +40,7 @@ public class ProductAdapter extends RecyclerView.Adapter {
 
         void onMenuClick(int position, View view , boolean mark );
 
-        void setViewPAger(ViewPager viewPager);
+        void setViewPAger(ViewPager viewPager, Product product1);
     }
 
     public void setOnItemClickListner(ProductAdapter.OnItemClickListner listner) {

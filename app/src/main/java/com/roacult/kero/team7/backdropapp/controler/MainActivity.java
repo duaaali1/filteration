@@ -23,6 +23,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.roacult.kero.team7.backdropapp.R;
+import com.roacult.kero.team7.backdropapp.controler.recycler_view.ViewPagerFragment;
 import com.roacult.kero.team7.backdropapp.controler.recycler_view.adapter.ProductAdapter;
 import com.roacult.kero.team7.backdropapp.dialog.AddDialogFragment;
 import com.roacult.kero.team7.backdropapp.dialog.CardDialogFragment;
@@ -55,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String Street;
     private int position1;
     private Toolbar mTopToolbar;
-
+    private ArrayList <ArrayList<Product>> arrayLists =new ArrayList<>();
     private com.github.clans.fab.FloatingActionMenu fab;
     private static MyCallback myCallback;
     @SuppressLint("NewApi")
@@ -131,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onchangeMark(boolean mark) {
-             //   ismark = mark;
+                //   ismark = mark;
             }
 
 
@@ -145,27 +146,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 position1 = position;
 
 
-                setupMoreDialog(view.getVisibility()==View.VISIBLE, view);
-               // ismark = mark;
+                setupMoreDialog(view.getVisibility() == View.VISIBLE, view);
+                // ismark = mark;
 
             }
 
             @Override
-            public void setViewPAger(ViewPager viewPager) {
-                setupViewPager(viewPager);
+            public void setViewPAger(ViewPager viewPager, Product product1) {
+                setupViewPager(viewPager, product1);
             }
 
 
         });
         rvProduct.setAdapter(productAdapter);
     }
-    private void setupViewPager(ViewPager viewPager) {
+
+    private void setupViewPager(ViewPager viewPager, Product product1) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-      /*  for (int i = 0; i < product.getImages().size(); i++) {
-            adapter.addFragment(new ViewPagerFragment(product.getImages().get(i).getSrc()));
-        }*/
-        //   adapter.addFragment(new ViewPagerFragment("https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"));
-        viewPager.setAdapter(adapter);
+        if (product1.getImagesList() != null) {
+            for (int i = 0; i < product1.getImagesList().size(); i++) {
+                adapter.addFragment(new ViewPagerFragment(product1.getImagesList().get(i)));
+
+            }
+            viewPager.setAdapter(adapter);
+
+            //   adapter.addFragment(new ViewPagerFragment("https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"));
+        }
+
     }
 
 
@@ -210,18 +217,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Workbook workbook = Workbook.getWorkbook(inputStream);
             Sheet sheet = workbook.getSheet(0);
             int rows = sheet.getRows();
-
-            for (int i = 1; i < rows;  i++) {
-                Product product = new Product(sheet.getCell(0, i).getContents(), null ,sheet.getCell(1, i).getContents(),  sheet.getCell(2, i).getContents(),null, sheet.getCell(3, i).getContents(), sheet.getCell(4, i).getContents(), sheet.getCell(5, i).getContents(), sheet.getCell(6, i).getContents(), sheet.getCell(7, i).getContents(), sheet.getCell(8, i).getContents(), null , sheet.getCell(9, i).getContents());
+            for (int i = 1; i < rows; i++) {
+                Product  product = new Product(getContents(sheet, i, 0), null, getContents(sheet, i, 1), getContents(sheet, i, 2), null, getContents(sheet, i, 3), getContents(sheet, i, 4), getContents(sheet, i, 5), getContents(sheet, i, 6), getContents(sheet, i, 7), getContents(sheet, i, 8), getImageLIst(sheet, i), getContents(sheet, i, 9));
                 productList.add(product);
                 productList1.add(product);
             }
 
 
         } catch (Exception e) {
+         int b=0;
 
         }
 
+    }
+
+    private String getContents(Sheet sheet, int i, int i2) {
+        return sheet.getCell(i2, i).getContents().trim();
+    }
+
+    private ArrayList<String> getImageLIst(Sheet sheet, int j) {
+        ArrayList<String> arrayList = new ArrayList<>();
+        for (int i = 10; i < 16; i++) {
+            if (getContents(sheet, j, i).equals(""))
+                continue;
+            arrayList.add(getContents(sheet, j, i));
+        }
+        return arrayList;
     }
 
 
@@ -305,15 +326,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void mark() {
-                if (view.getVisibility()==View.VISIBLE)
+                if (view.getVisibility() == View.VISIBLE)
                     view.setVisibility(View.GONE);
                 else
                     view.setVisibility(View.VISIBLE);
                 //    myCallback.mark();
-                if (view.getVisibility()==View.VISIBLE) {
+                if (view.getVisibility() == View.VISIBLE) {
                     markedList1.add(filterdproductList.get(position1));
-                } else
-                    if (markedList1.contains(filterdproductList.get(position1)))
+                } else if (markedList1.contains(filterdproductList.get(position1)))
                     markedList1.remove(filterdproductList.get(position1));
 
                 saveList(markedList1, "mark");

@@ -61,8 +61,13 @@ public class Product extends BaseModel {
 
     @NotNull
     private String getJordanianPrice(String chinaPrice) {
-        if (!chinaPrice.equals(""))
-        return Double.valueOf(new DecimalFormat("#.#").format(Double.parseDouble(chinaPrice) * 0.16)) +" JD";
+        try {
+            if (!chinaPrice.equals(""))
+                return Double.valueOf(new DecimalFormat("#.#").format(Double.parseDouble(chinaPrice) * 0.16)) +" JD";
+        } catch (Exception e) {
+
+        }
+
     return null;
     }
 
