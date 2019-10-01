@@ -37,6 +37,7 @@ public class SplashActivity extends Activity {
                 try {
                     //Display for 3 seconds
                     sleep(2000);
+                    startService();
                 } catch (InterruptedException e) {
                     // TODO: handle exception
                     e.printStackTrace();

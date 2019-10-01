@@ -31,14 +31,15 @@ public class ProductViewHolder extends RecyclerView.ViewHolder {
     private TextView llstorNo;
     private LinearLayout image;
     private ViewPager viewPager;
-    private  TextView tvNotes;
+    private TextView tvNotes;
 
-    private  boolean mark =false ;
-private  ProductAdapter.OnItemClickListner listner;
+    private boolean mark = false;
+    private ProductAdapter.OnItemClickListner listner;
+
     public ProductViewHolder(@NonNull final View itemView, final ProductAdapter.OnItemClickListner mlistener) {
         super(itemView);
         init(itemView);
-        this.listner=mlistener;
+        this.listner = mlistener;
 
 
         itemView.setOnClickListener(new View.OnClickListener() {
@@ -105,11 +106,11 @@ private  ProductAdapter.OnItemClickListner listner;
 
     private int getVisible() {
         if (mark) {
-           mark=false;
-           listner.onchangeMark(mark);
+            mark = false;
+            listner.onchangeMark(mark);
             return View.GONE;
         } else {
-            mark=true;
+            mark = true;
             listner.onchangeMark(mark);
 
             return View.VISIBLE;
@@ -131,7 +132,7 @@ private  ProductAdapter.OnItemClickListner listner;
         image = view.findViewById(R.id.more);
         //imagesList=view.findViewById(R.i);
         markImageView = view.findViewById(R.id.mark);
-        viewPager =view. findViewById(R.id.viewpager);
+        viewPager = view.findViewById(R.id.viewpager);
         tvNotes = view.findViewById(R.id.tvNotes);
 
 
@@ -148,7 +149,7 @@ private  ProductAdapter.OnItemClickListner listner;
         tvcartonsNo.setText(product1.getCartonsNo());
         tvtotal.setText(product1.getTotal());
         tvNotes.setText(product1.getNotes());
-        listner.setViewPAger(viewPager , product1);
+        listner.setViewPAger(viewPager, product1);
         // setupViewPager(viewPager);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -167,6 +168,10 @@ private  ProductAdapter.OnItemClickListner listner;
 
             }
         });
+        if (product1.getMark())
+            markImageView.setVisibility(View.VISIBLE);
+        else
+            markImageView.setVisibility(View.GONE);
     }
 }
 

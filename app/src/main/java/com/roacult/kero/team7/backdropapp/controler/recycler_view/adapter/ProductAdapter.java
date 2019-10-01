@@ -15,6 +15,7 @@ import com.roacult.kero.team7.backdropapp.controler.recycler_view.viewholder.Loa
 import com.roacult.kero.team7.backdropapp.controler.recycler_view.viewholder.ProductViewHolder;
 import com.roacult.kero.team7.backdropapp.model.BaseModel;
 import com.roacult.kero.team7.backdropapp.model.Product;
+import com.roacult.kero.team7.backdropapp.model.ProgCell;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,13 +24,24 @@ import java.util.List;
  * HOME ITEM PRODUCT ADAPTER
  */
 
-public class ProductAdapter extends RecyclerView.Adapter {
+public class ProductAdapter extends BaseAdapter {
     private Context context;
-    private ArrayList<Product> productList;
+    private ArrayList<BaseModel> productList;
     private static final int LOADING = 0;
     private static final int ITEM = 1;
     private boolean isLoadingAdded = false;
     private ProductAdapter.OnItemClickListner mlistner;
+
+    public void addLoadingFooter() {
+        isLoadingAdded = true;
+        add(new ProgCell());
+    }
+
+    public void add(BaseModel user) {
+        productList.add(user);
+        notifyItemInserted(productList.size() - 1);
+    }
+
 
     public interface OnItemClickListner {
         void onItemClick(int position, View view);
@@ -47,7 +59,7 @@ public class ProductAdapter extends RecyclerView.Adapter {
         mlistner = listner;
     }
 
-    public ProductAdapter(Context context, ArrayList<Product> productList) {
+    public ProductAdapter(Context context, ArrayList<BaseModel> productList) {
         this.context = context;
         this.productList = productList;
     }
@@ -113,8 +125,23 @@ public class ProductAdapter extends RecyclerView.Adapter {
         this.productList.addAll(list);
         this.notifyDataSetChanged();
 
-    }
 
+        setLoading(false);
+        if(productList.size()!=0)
+            removeLoadingFooter();
+        this.productList.addAll(list);
+        notifyDataSetChanged();
+
+    }
+    public void removeLoadingFooter() {
+        int position = productList.size() - 1;
+        BaseModel result =  productList.get(position);
+        if (result != null&&result instanceof ProgCell ) {
+            productList.remove(position);
+            notifyItemRemoved(position);
+            isLoadingAdded = false;
+        }
+    }
     public int getItemViewType(int position) {
         return (position == productList.size() - 1 && isLoadingAdded) ? LOADING : ITEM;
     }

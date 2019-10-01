@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import androidx.fragment.app.DialogFragment;
 
@@ -29,11 +28,9 @@ public class AddDialogFragment extends DialogFragment {
     private EditText edstoreNumber;
     private EditText editem;
     private EditText edchinaPrice;
-    private EditText edjordanianPrice;
     private EditText edpacking;
     private EditText edNotes;
     private EditText edcartonsNo;
-    private EditText edtotal;
 
 
     public AddDialogFragment(MyCallback myCallback) {
@@ -67,7 +64,8 @@ public class AddDialogFragment extends DialogFragment {
         img1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                myCallback.onSave(new Product(getText(edbuilding), null, getText(edstreet), getText(edstoreNumber), null, getText(editem), getText(edchinaPrice), null, getText(edpacking), getText(edcartonsNo), null, null , getText(edNotes)));
+
+                myCallback.onSave(new Product(getText(edbuilding), null, getText(edstreet), getText(edstoreNumber), null, getText(editem), getText(edchinaPrice), null, getText(edpacking), getText(edcartonsNo), null, null , getText(edNotes), null));
                 getDialog().dismiss();
             }
         });

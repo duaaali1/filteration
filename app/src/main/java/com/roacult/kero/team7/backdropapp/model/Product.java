@@ -18,7 +18,17 @@ public class Product extends BaseModel {
     private String cartonsNo;
     private String total;
     private ArrayList<String> imagesList;
-    private  boolean mark =false ;
+    private boolean mark = false;
+
+    public String getStoreImage() {
+        return storeImage;
+    }
+
+    public void setStoreImage(String storeImage) {
+        this.storeImage = storeImage;
+    }
+
+    private String storeImage;
 
     public String getNotes() {
         return notes;
@@ -28,7 +38,7 @@ public class Product extends BaseModel {
         this.notes = notes;
     }
 
-    private  String notes;
+    private String notes;
 
     public boolean getMark() {
         return mark;
@@ -39,11 +49,9 @@ public class Product extends BaseModel {
     }
 
 
+    // private DecimalFormat twoDForm = new DecimalFormat("#.#");
 
-
-   // private DecimalFormat twoDForm = new DecimalFormat("#.#");
-
-    public Product(String building, String floor, String street, String storeNumber, String itemNo, String item, String chinaPrice, String jordanianPrice, String packing, String cartonsNo, String total, ArrayList<String> imagesList , String  notes) {
+    public Product(String building, String floor, String street, String storeNumber, String itemNo, String item, String chinaPrice, String jordanianPrice, String packing, String cartonsNo, String total, ArrayList<String> imagesList, String notes, String storeImage) {
         this.building = building;
         this.floor = floor;
         this.street = street;
@@ -56,24 +64,25 @@ public class Product extends BaseModel {
         this.cartonsNo = cartonsNo;
         this.total = getTotal(packing, cartonsNo);
         this.imagesList = imagesList;
-        this.notes=notes;
+        this.notes = notes;
+        this.storeImage = storeImage ;
     }
 
     @NotNull
     private String getJordanianPrice(String chinaPrice) {
         try {
             if (!chinaPrice.equals(""))
-                return Double.valueOf(new DecimalFormat("#.#").format(Double.parseDouble(chinaPrice) * 0.16)) +" JD";
+                return Double.valueOf(new DecimalFormat("#.#").format(Double.parseDouble(chinaPrice) * 0.16)) + " JD";
         } catch (Exception e) {
 
         }
 
-    return null;
+        return null;
     }
 
     @NotNull
     private String getTotal(String packing, String cartonsNo) {
-        if(!packing.equals("")&& !cartonsNo.equals(""))
+        if (!packing.equals("") && !cartonsNo.equals(""))
             return String.valueOf(Double.valueOf(new DecimalFormat("#.#").format(Double.parseDouble(packing) * Double.parseDouble(cartonsNo))));
         return null;
     }

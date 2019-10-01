@@ -21,6 +21,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.roacult.kero.team7.backdropapp.R;
 import com.roacult.kero.team7.backdropapp.controler.MainActivity;
+import com.roacult.kero.team7.backdropapp.controler.MyCallback;
 import com.roacult.kero.team7.backdropapp.model.Product;
 
 import java.io.InputStream;
@@ -34,23 +35,44 @@ import jxl.Workbook;
 public class MyStartedServiceWithNotification extends Service {
     public static final String CHANNEL_ID = "exampleServiceChannel";
     private ArrayList<Product> productList = new ArrayList<>();
-    private ArrayList<Product> productList1 = new ArrayList<>();
+    private static ArrayList<Product>  productList1 = new ArrayList<>();
+    private  static MyCallback  callback;
+
+    public ArrayList<Product> getProductList1() {
+        return productList1;
+    }
+    public  static void   sendList(){
+        callback.send(productList1);
+    }
+    public void setProductList1(ArrayList<Product> productList1) {
+        this.productList1 = productList1;
+    }
+
+    public static void setCallBack(MyCallback callBack) {
+       callback = callBack;
+   }
+
     public class MyThreadClass implements Runnable {
-        private int service_id;
+    private int service_id;
 
         public MyThreadClass(int service_id) {
             this.service_id = service_id;
+
         }
 
 
         @Override
         public void run() {
             synchronized (this) {
+                getData() ;
+
 
 
             }
         }
     }
+
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -73,7 +95,6 @@ public class MyStartedServiceWithNotification extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Toast.makeText(this, "Service started...", Toast.LENGTH_SHORT).show();
         Intent notificationIntent = new Intent(this, MainActivity.class);
 
 
@@ -81,8 +102,8 @@ public class MyStartedServiceWithNotification extends Service {
                 0, notificationIntent, 0);
 
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle("Example Service")
-                .setContentText("Your location is traked")
+                .setContentTitle("شخشير")
+                .setContentText("تطبيق شخشير يعمل الان")
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentIntent(pendingIntent)
                 .build();
@@ -98,7 +119,6 @@ public class MyStartedServiceWithNotification extends Service {
 
     @Override
     public void onDestroy() {
-        Toast.makeText(this, "Service Destroyed...", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -125,7 +145,7 @@ public class MyStartedServiceWithNotification extends Service {
             Sheet sheet = workbook.getSheet(0);
             int rows = sheet.getRows();
             for (int i = 1; i < rows; i++) {
-                Product  product = new Product(getContents(sheet, i, 0), null, getContents(sheet, i, 1), getContents(sheet, i, 2), null, getContents(sheet, i, 3), getContents(sheet, i, 4), getContents(sheet, i, 5), getContents(sheet, i, 6), getContents(sheet, i, 7), getContents(sheet, i, 8), getImageLIst(sheet, i), getContents(sheet, i, 9));
+                Product  product = new Product(getContents(sheet, i, 0), null, getContents(sheet, i, 1), getContents(sheet, i, 2), null, getContents(sheet, i, 3), getContents(sheet, i, 4), getContents(sheet, i, 5), getContents(sheet, i, 6), getContents(sheet, i, 7), getContents(sheet, i, 8), getImageLIst(sheet, i), getContents(sheet, i, 9),getContents(sheet, i, 10));
                 productList.add(product);
                 productList1.add(product);
             }
@@ -165,4 +185,5 @@ public class MyStartedServiceWithNotification extends Service {
     private String getContents(Sheet sheet, int i, int i2) {
         return sheet.getCell(i2, i).getContents().trim();
     }
+
 }
