@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 public abstract class MyCallback {
    public abstract void onSave(Product product) ;
+   public abstract void onSave(String edbuilding, String  edstreet, String edstoreNumber , String editem, String edchinaPrice, String edpacking, String edcartonsNo ,  String edNotes) ;
 
     public void delete(){}
 

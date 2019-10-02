@@ -127,7 +127,7 @@ public class MyStartedServiceWithNotification extends Service {
     }
 
 
-    private void getData() {
+    private  void getData() {
         ArrayList List = (ArrayList) readList("List");
         if (List == null) {
             readFromExcel();
@@ -136,7 +136,7 @@ public class MyStartedServiceWithNotification extends Service {
         } else
             productList1= List;
     }
-    private void readFromExcel() {
+    private   void readFromExcel() {
         try {
 
             AssetManager am = getAssets();
@@ -156,7 +156,7 @@ public class MyStartedServiceWithNotification extends Service {
         }
 
     }
-    private void saveList(ArrayList<Product> List, String TAG) {
+    private  void saveList(ArrayList<Product> List, String TAG) {
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = sharedPrefs.edit();
         Gson gson = new Gson();
@@ -174,7 +174,7 @@ public class MyStartedServiceWithNotification extends Service {
         return arrayList;
     }
 
-    private List<Product> readList(String TAG) {
+    private  List<Product> readList(String TAG) {
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         Gson gson = new Gson();
         String json = sharedPrefs.getString(TAG, "");

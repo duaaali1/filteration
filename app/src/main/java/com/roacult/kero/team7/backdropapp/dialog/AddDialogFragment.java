@@ -65,7 +65,7 @@ public class AddDialogFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
 
-                myCallback.onSave(new Product(getText(edbuilding), null, getText(edstreet), getText(edstoreNumber), null, getText(editem), getText(edchinaPrice), null, getText(edpacking), getText(edcartonsNo), null, null , getText(edNotes), null));
+                myCallback.onSave(getText(edbuilding), getText(edstreet), getText(edstoreNumber), getText(editem), getText(edchinaPrice), getText(edpacking), getText(edcartonsNo),  getText(edNotes));
                 getDialog().dismiss();
             }
         });

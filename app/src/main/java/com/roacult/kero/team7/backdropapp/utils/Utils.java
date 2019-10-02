@@ -43,5 +43,10 @@ public class Utils {
         Intent intent = new Intent(activity, MyStartedServiceWithNotification.class);
         activity.stopService(intent);
     }
+    public  static  void startService(Activity activity) {
+        Intent intent = new Intent(activity, MyStartedServiceWithNotification.class);
+
+        activity.startService(intent);
+    }
 
 }

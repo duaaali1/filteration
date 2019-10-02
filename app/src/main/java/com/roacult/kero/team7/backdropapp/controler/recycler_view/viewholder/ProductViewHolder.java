@@ -1,6 +1,5 @@
 package com.roacult.kero.team7.backdropapp.controler.recycler_view.viewholder;
 
-import android.app.Activity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -11,9 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.roacult.kero.team7.backdropapp.R;
-import com.roacult.kero.team7.backdropapp.controler.MainActivity;
-import com.roacult.kero.team7.backdropapp.controler.MyCallback;
-import com.roacult.kero.team7.backdropapp.controler.ViewPagerAdapter;
+
 import com.roacult.kero.team7.backdropapp.controler.recycler_view.adapter.ProductAdapter;
 import com.roacult.kero.team7.backdropapp.model.Product;
 
@@ -87,35 +84,12 @@ public class ProductViewHolder extends RecyclerView.ViewHolder {
                 }
             }
         });
-        MainActivity.setCallBack(new MyCallback() {
-            @Override
-            public void onSave(Product product) {
-
-            }
-
-            @Override
-            public void mark() {
-                markImageView.setVisibility(getVisible());
-
-            }
-        });
 
 
     }
 
 
-    private int getVisible() {
-        if (mark) {
-            mark = false;
-            listner.onchangeMark(mark);
-            return View.GONE;
-        } else {
-            mark = true;
-            listner.onchangeMark(mark);
 
-            return View.VISIBLE;
-        }
-    }
 
 
     private void init(View view) {

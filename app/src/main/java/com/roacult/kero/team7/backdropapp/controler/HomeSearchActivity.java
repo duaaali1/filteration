@@ -34,6 +34,7 @@ public class HomeSearchActivity extends AppCompatActivity implements View.OnClic
     private String Street;
     private Toolbar toolbar;
     private Button btn_search;
+    private boolean waiting;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -93,5 +94,11 @@ public class HomeSearchActivity extends AppCompatActivity implements View.OnClic
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Utils.stopService(this);
     }
 }

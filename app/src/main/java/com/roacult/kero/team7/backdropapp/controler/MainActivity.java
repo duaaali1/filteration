@@ -1,28 +1,22 @@
 package com.roacult.kero.team7.backdropapp.controler;
 
 import android.annotation.SuppressLint;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
-
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-
 import android.view.View;
-
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
-
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.roacult.kero.team7.backdropapp.R;
+
 import com.roacult.kero.team7.backdropapp.controler.recycler_view.ViewPagerFragment;
 import com.roacult.kero.team7.backdropapp.controler.recycler_view.adapter.ProductAdapter;
 import com.roacult.kero.team7.backdropapp.controler.service.MyStartedServiceWithNotification;
@@ -32,14 +26,10 @@ import com.roacult.kero.team7.backdropapp.dialog.MoreDialogFragment;
 import com.roacult.kero.team7.backdropapp.model.BaseModel;
 import com.roacult.kero.team7.backdropapp.model.Product;
 import com.roacult.kero.team7.backdropapp.utils.Utils;
-
-
 import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
 import jxl.Sheet;
 import jxl.Workbook;
 
@@ -84,9 +74,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             @Override
+            public void onSave(String edbuilding, String edstreet, String edstoreNumber, String editem, String edchinaPrice, String edpacking, String edcartonsNo, String edNotes) {
+
+            }
+
+            @Override
             public void send(ArrayList<Product> productList2) {
-
-
                 productList1.addAll(productList2);
                 setupProductRv();
                 filter();
@@ -99,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         });
         if (productList1.size() == 0)
-            startService();
+            Utils.startService(this);
         MyStartedServiceWithNotification.sendList();
         // getData();
 
@@ -109,11 +102,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private void startService() {
-        Intent intent = new Intent(this, MyStartedServiceWithNotification.class);
-
-        startService(intent);
-    }
 
     private void filter() {
         filterdproductList.clear();
@@ -121,13 +109,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             filter(productList1.get(i));
         }
         productAdapter.addAllItems(filterdproductList);
-
     }
 
-
-    public static void setCallBack(MyCallback callBack) {
-        myCallback = callBack;
-    }
 
     public void setToolbar() {
         setSupportActionBar(mTopToolbar);
@@ -176,11 +159,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onMenuClick(int position, View view, boolean mark) {
                 position1 = position;
-
-
                 setupMoreDialog(view.getVisibility() == View.VISIBLE, view, position);
                 // ismark = mark;
-
             }
 
             @Override
@@ -241,10 +221,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }*/
 
 
-
     private void filter(Product product) {
         if ((product.getItem().toLowerCase().contains(Name) || Name.equals("")) && (product.getStoreNumber().toLowerCase().equals(storNO) || storNO.equals("")) && (product.getStreet().toLowerCase().equals(Street) || Street.equals("")) && (product.getBuilding().toLowerCase().contains(Building) || Building.equals(""))) {
-            if(markedList1.contains(product))
+            if (markedList1.contains(product))
                 product.setMark(true);
             filterdproductList.add(product);
         }
@@ -309,13 +288,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 break;
             case R.id.fabMark:
-                ArrayList markedList2 = (ArrayList<Product>) readList("mark");
-                if (markedList2 != null)
-                    productAdapter.addAllItems(markedList2);
-                else {
-                    markedList2=new ArrayList();
-                    productAdapter.addAllItems(markedList2);
-                }
+                markedList1 = (ArrayList<Product>) readList("mark");
+                if (markedList1 != null)
+                    productAdapter.addAllItems(markedList1);
 
                 break;
             case R.id.fabAdd:
@@ -327,22 +302,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    private void setupDialog() {
+    private void setupDialog(int position) {
         final AddDialogFragment dialogFragment = new AddDialogFragment(new MyCallback() {
             @Override
             public void onSave(Product product) {
-                product.setImagesList(filterdproductList.get(position1).getImagesList());
-                product.setStoreImage(filterdproductList.get(position1).getStoreImage());
-                productAdapter.update(product, position1);
-                productList1.set(productList1.indexOf(filterdproductList.get(position1)), product);
-                if (markedList1.contains(filterdproductList.get(position1)))
-                    markedList1.set(markedList1.indexOf(filterdproductList.get(position1)), product);
-                filterdproductList.set(position1, product);
+
+            }
+
+            @Override
+            public void onSave(String edbuilding, String edstreet, String edstoreNumber, String editem, String edchinaPrice, String edpacking, String edcartonsNo, String edNotes) {
+                updateList(edbuilding, edstreet, edstoreNumber, editem, edchinaPrice, edpacking, edcartonsNo, edNotes, position, productList1);
+
+                productAdapter.update(productList1.get(position), position);
+                updateList(edbuilding, edstreet, edstoreNumber, editem, edchinaPrice, edpacking, edcartonsNo, edNotes, position, filterdproductList);
+
+                if (markedList1.contains(filterdproductList.get(position)))
+                    markedList1.set(markedList1.indexOf(filterdproductList.get(position)), filterdproductList.get(position));
                 saveList(markedList1, "mark");
                 saveList(productList1, "List");
             }
         });
         dialogFragment.show(getSupportFragmentManager(), "Sample Fragment");
+    }
+
+    ;
+
+    private void updateList(String edbuilding, String edstreet, String edstoreNumber, String editem, String edchinaPrice, String edpacking, String edcartonsNo, String edNotes, int position, ArrayList<Product> productList1) {
+        productList1.get(position).setBuilding(edbuilding);
+        productList1.get(position).setStreet(edstreet);
+        productList1.get(position).setStoreNumber(edstoreNumber);
+        productList1.get(position).setItem(editem);
+        productList1.get(position).setChinaPrice(edchinaPrice);
+        productList1.get(position).setPacking(edpacking);
+        productList1.get(position).setCartonsNo(edcartonsNo);
+        productList1.get(position).setNotes(edNotes);
     }
 
     private void setupAddDialog() {
@@ -353,6 +346,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 filterdproductList.add(product);
                 saveList(productList1, "List");
                 productAdapter.add(product, productList1.size() - 1);
+            }
+
+            @Override
+            public void onSave(String edbuilding, String edstreet, String edstoreNumber, String editem, String edchinaPrice, String edpacking, String edcartonsNo, String edNotes) {
+
             }
 
 
@@ -367,35 +365,49 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
 
+            @Override
+            public void onSave(String edbuilding, String edstreet, String edstoreNumber, String editem, String edchinaPrice, String edpacking, String edcartonsNo, String edNotes) {
+
+            }
+
 
             @Override
             public void delete() {
-                productAdapter.remove(filterdproductList.get(position1));
-                productList1.remove(filterdproductList.get(position1));
-
-
+                productAdapter.remove(filterdproductList.get(position));
+                productList1.remove(filterdproductList.get(position));
                 saveList(productList1, "List");
-                if (markedList1.contains(filterdproductList.get(position1))) {
-
-                    markedList1.remove(filterdproductList.get(position1));
+                if (markedList1.contains(filterdproductList.get(position))) {
+                    markedList1.remove(filterdproductList.get(position));
                     saveList(markedList1, "mark");
                 }
-                filterdproductList.remove(position1);
+                filterdproductList.remove(position);
             }
 
             @Override
             public void edit() {
-                setupDialog();
+                setupDialog(position);
 
             }
 
             @Override
             public void mark() {
-                if (view.getVisibility() == View.VISIBLE)
+                if (view.getVisibility() == View.VISIBLE) {
                     view.setVisibility(View.GONE);
-                else
+                    filterdproductList.get(position).setMark(false);
+                    productList1.get(position).setMark(false);
+                    saveList(productList1, "List");
+                    markedList1.remove(filterdproductList.get(position));
+                    saveList(markedList1, "mark");
+                } else {
                     view.setVisibility(View.VISIBLE);
-                //    myCallback.mark();
+                    filterdproductList.get(position).setMark(true);
+                    productList1.get(position).setMark(true);
+                    saveList(productList1, "List");
+                    markedList1.add(filterdproductList.get(position));
+                    saveList(markedList1, "mark");
+                }
+
+            /*    //    myCallback.mark();
                 if (view.getVisibility() == View.VISIBLE) {
                     filterdproductList.get(position1).setMark(true);
                     markedList1.add(filterdproductList.get(position1));
@@ -405,7 +417,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 }
 
-                saveList(markedList1, "mark");
+                saveList(markedList1, "mark");*/
 
             }
         }, mark);

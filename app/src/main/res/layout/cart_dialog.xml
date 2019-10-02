@@ -16,7 +16,6 @@
             android:id="@+id/ivImg"
             android:layout_width="match_parent"
             android:layout_height="305dp"
-            android:background="@drawable/s"
             android:scaleType="fitXY" />
 
         <LinearLayout
