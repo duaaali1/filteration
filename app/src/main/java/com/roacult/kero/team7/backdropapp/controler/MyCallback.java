@@ -13,6 +13,8 @@ public abstract class MyCallback {
     public void edit(){}
 
   public   void mark(){}
+  public   void onchange(){}
+
 
     public  void send(ArrayList<Product> productList1){}
 }

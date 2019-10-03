@@ -126,11 +126,7 @@ public class ProductAdapter extends BaseAdapter {
         this.notifyDataSetChanged();
 
 
-        setLoading(false);
-        if(productList.size()!=0)
-            removeLoadingFooter();
-        this.productList.addAll(list);
-        notifyDataSetChanged();
+
 
     }
     public void removeLoadingFooter() {

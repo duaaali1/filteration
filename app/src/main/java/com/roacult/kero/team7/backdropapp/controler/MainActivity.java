@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static MyCallback myCallback;
     private Integer nextPage = 0;
     private ArrayList arrayList;
+    private static  MyCallback serviceCall ;
 
     @SuppressLint("NewApi")
     @Override
@@ -93,13 +94,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
         if (productList1.size() == 0)
             Utils.startService(this);
+        if(serviceCall!=null)
+        serviceCall.onchange();
         MyStartedServiceWithNotification.sendList();
         // getData();
 
 
         //markedList1= (ArrayList<Product>) readList("mark");
 
+    }
 
+    public static void setService( MyCallback callback) {
+        serviceCall= callback ;
     }
 
 
@@ -209,15 +215,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
-  /*  private void filter() {
-
+  /*private void filter() {
         filterdproductList.clear();
         filterdproductList.addAll(Collections2.filter(productList1, filterDescription(Name, storNO, Building, Street))) ;
         productAdapter.addAllItems(filterdproductList);
 
        *//* for (int i = 0; i < productList1.size(); i++) {
             filter(productList1.get(i));
-        }*//*
+        }
     }*/
 
 
@@ -233,14 +238,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     private void init() {
-
         rvProduct = findViewById(R.id.rvProduct);
         fab = findViewById(R.id.menu_green);
-
         fabSearch = findViewById(R.id.fabSearch);
         fabMark = findViewById(R.id.fabMark);
         fabAdd = findViewById(R.id.fabAdd);
-
     }
 
     private void readFromExcel() {
@@ -325,7 +327,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         dialogFragment.show(getSupportFragmentManager(), "Sample Fragment");
     }
 
-    ;
+
 
     private void updateList(String edbuilding, String edstreet, String edstoreNumber, String editem, String edchinaPrice, String edpacking, String edcartonsNo, String edNotes, int position, ArrayList<Product> productList1) {
         productList1.get(position).setBuilding(edbuilding);

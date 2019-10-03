@@ -66,12 +66,27 @@ public class MyStartedServiceWithNotification extends Service {
             synchronized (this) {
                 getData() ;
 
+                MainActivity.setService(new MyCallback() {
+                    @Override
+                    public void onSave(Product product) {
+
+                    }
+
+                    @Override
+                    public void onSave(String edbuilding, String edstreet, String edstoreNumber, String editem, String edchinaPrice, String edpacking, String edcartonsNo, String edNotes) {
+
+                    }
+                    public   void onchange(){
+
+                        getData();
+                    }
+
+                });
 
 
             }
         }
     }
-
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
